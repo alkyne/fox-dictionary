@@ -1,0 +1,8 @@
+# macOS
+.DS_Store
+
+# Dependencies (혹시 npx serve 등을 쓸 경우)
+node_modules/
+
+# Vercel CLI 배포 산출물
+.vercel
