@@ -10,6 +10,7 @@
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
+::selection { background: var(--fox); color: #fffaf3; }
 html { -webkit-text-size-adjust: 100%; background-color: #f4b980; }
 
 body {
@@ -43,14 +44,16 @@ body::before {
   user-select: none;
   filter: saturate(.85);
   z-index: 0;
+  transform: rotate(var(--r, 0deg));
+  animation: sway 7s ease-in-out infinite alternate;
 }
 
-.leaf.a { top: 7%;  left: 6%;  transform: rotate(-18deg); }
-.leaf.b { top: 20%; right: 7%; font-size: 34px; transform: rotate(20deg); }
-.leaf.c { bottom: 13%; left: 8%; font-size: 38px; transform: rotate(12deg); }
-.leaf.d { bottom: 8%;  right: 8%; transform: rotate(-24deg); }
-.leaf.e { top: 44%; left: 5%;  font-size: 40px; transform: rotate(-6deg); }
-.leaf.f { top: 56%; right: 6%; font-size: 30px; transform: rotate(14deg); }
+.leaf.a { top: 7%;  left: 6%;  --r: -18deg; }
+.leaf.b { top: 20%; right: 7%; font-size: 34px; --r: 20deg;  animation-duration: 8.5s; animation-delay: -2.4s; }
+.leaf.c { bottom: 13%; left: 8%; font-size: 38px; --r: 12deg;  animation-duration: 7.6s; animation-delay: -4.1s; }
+.leaf.d { bottom: 8%;  right: 8%; --r: -24deg; animation-duration: 9.2s; animation-delay: -1.2s; }
+.leaf.e { top: 44%; left: 5%;  font-size: 40px; --r: -6deg;  animation-duration: 8.2s; animation-delay: -5.3s; }
+.leaf.f { top: 56%; right: 6%; font-size: 30px; --r: 14deg;  animation-duration: 7.3s; animation-delay: -3.2s; }
 
 .card {
   position: relative;
@@ -58,7 +61,7 @@ body::before {
   width: 100%;
   max-width: 640px;
   background: var(--paper);
-  border-radius: 26px;
+  border-radius: 30px;
   padding: clamp(22px, 5.5vw, 42px);
   border: 1px solid rgba(255, 255, 255, .65);
   box-shadow:
@@ -73,7 +76,11 @@ header { text-align: center; margin-bottom: clamp(20px, 4.5vw, 30px); }
   font-size: clamp(42px, 12vw, 62px);
   line-height: 1;
   filter: drop-shadow(0 6px 10px rgba(168, 72, 31, .35));
+  transform-origin: 50% 85%;
+  animation: bob 2s ease-in-out infinite alternate;
 }
+
+.emblem:hover { animation-duration: 1.1s; }
 
 h1 {
   font-family: "Jua", "Pretendard", sans-serif;
@@ -136,7 +143,7 @@ td.f-num {
   font-size: 13.5px;
   letter-spacing: .3px;
   border-left: 4px solid var(--fox);
-  border-radius: 14px 0 0 14px;
+  border-radius: 16px 0 0 16px;
 }
 
 td.f-name {
@@ -151,12 +158,18 @@ td.f-desc {
   line-height: 1.55;
   font-size: 14.5px;
   border-right: 1px solid var(--line);
-  border-radius: 0 14px 14px 0;
+  border-radius: 0 16px 16px 0;
 }
 
-.fox-ico { margin-right: 7px; }
+.fox-ico {
+  display: inline-block;
+  margin-right: 7px;
+  transition: transform .18s ease;
+  animation: ico-bob 2.4s ease-in-out infinite alternate backwards;
+  animation-delay: calc(var(--i, 0) * 240ms);
+}
 
-tbody tr { animation: rise .5s ease both; animation-delay: calc(var(--i, 0) * 55ms + .15s); }
+tbody tr { animation: rise .5s cubic-bezier(.34, 1.56, .64, 1) backwards; animation-delay: calc(var(--i, 0) * 55ms + .15s); }
 tbody tr:nth-child(1) { --i: 0; }
 tbody tr:nth-child(2) { --i: 1; }
 tbody tr:nth-child(3) { --i: 2; }
@@ -166,16 +179,57 @@ tbody tr:nth-child(6) { --i: 5; }
 tbody tr:nth-child(7) { --i: 6; }
 tbody tr:nth-child(8) { --i: 7; }
 tbody tr:nth-child(9) { --i: 8; }
-tbody tr:hover td { background: #fff; transform: translateY(-2px); box-shadow: 0 12px 22px -12px rgba(168, 72, 31, .45); }
+tbody tr:nth-child(10) { --i: 9; }
+tbody tr:nth-child(11) { --i: 10; }
+tbody tr:nth-child(12) { --i: 11; }
+tbody tr:nth-child(13) { --i: 12; }
+tbody tr:hover td { background: #fff; transform: translateY(-3px); box-shadow: 0 12px 22px -12px rgba(168, 72, 31, .45); }
 tbody tr:hover td.f-num { border-left-color: var(--rust); }
+tbody tr:hover .fox-ico { animation: none; transform: rotate(-12deg) scale(1.22); }
 
 footer { text-align: center; margin-top: 24px; color: #9a6a44; font-size: 12.5px; line-height: 1.7; }
 .shrine { font-size: 18px; letter-spacing: 3px; margin-bottom: 8px; }
 .tails { font-size: 16px; letter-spacing: 1px; }
 
+.tail-fox {
+  display: inline-block;
+  animation: wave 2.4s ease-in-out infinite;
+  animation-delay: calc(var(--i, 0) * .18s);
+}
+.tail-fox:nth-child(1) { --i: 0; }
+.tail-fox:nth-child(2) { --i: 1; }
+.tail-fox:nth-child(3) { --i: 2; }
+.tail-fox:nth-child(4) { --i: 3; }
+.tail-fox:nth-child(5) { --i: 4; }
+.tail-fox:nth-child(6) { --i: 5; }
+.tail-fox:nth-child(7) { --i: 6; }
+.tail-fox:nth-child(8) { --i: 7; }
+.tail-fox:nth-child(9) { --i: 8; }
+
 @keyframes rise {
-  from { opacity: 0; transform: translateY(14px); }
+  from { opacity: 0; transform: translateY(18px); }
   to   { opacity: 1; transform: none; }
+}
+
+@keyframes bob {
+  from { transform: translateY(0) rotate(-8deg); }
+  50%  { transform: translateY(-9px) rotate(1deg); }
+  to   { transform: translateY(0) rotate(8deg); }
+}
+
+@keyframes sway {
+  from { transform: translateY(0) rotate(var(--r, 0deg)); }
+  to   { transform: translateY(16px) translateX(9px) rotate(calc(var(--r, 0deg) + 13deg)); }
+}
+
+@keyframes ico-bob {
+  from { transform: translateY(0) rotate(-6deg); }
+  to   { transform: translateY(-3px) rotate(6deg); }
+}
+
+@keyframes wave {
+  0%, 55%, 100% { transform: translateY(0) rotate(0deg); }
+  30% { transform: translateY(-9px) rotate(-14deg); }
 }
 
 /* 좁은 화면: 각 행을 세로 카드로 전환 */
@@ -184,9 +238,10 @@ footer { text-align: center; margin-top: 24px; color: #9a6a44; font-size: 12.5px
 
   tr {
     margin-bottom: 12px;
-    border-radius: 16px;
+    border-radius: 18px;
     overflow: hidden;
     box-shadow: 0 8px 18px -12px rgba(168, 72, 31, .4);
+    transition: transform .15s ease;
   }
 
   tbody td { border: none; }
@@ -213,8 +268,11 @@ footer { text-align: center; margin-top: 24px; color: #9a6a44; font-size: 12.5px
 
   td.f-name .fox-ico { filter: drop-shadow(0 1px 1px rgba(0,0,0,.2)); }
   td.f-desc { border-radius: 0; font-size: 14px; }
-  tbody tr:hover td { transform: none; box-shadow: none; }
-  tbody tr:active td.f-desc { background: #fff; }
+  /* 터치 기기는 탭 시 :hover가 고정되므로 데스크톱용 흰 배경을 원래 색으로 되돌림 */
+  tbody tr:hover td { transform: none; box-shadow: none; background: var(--cream); }
+  tbody tr:hover td.f-num { background: #f7d9b6; }
+  tbody tr:hover td.f-name { background: var(--fox); }
+  tbody tr:active { transform: scale(.98); }
 }
 
 @media (prefers-reduced-motion: reduce) {
