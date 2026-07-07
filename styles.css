@@ -141,10 +141,10 @@ h1 {
 }
 
 .talent {
-  display: grid;
-  grid-template-columns: auto 1fr; /* 이름 | 설명 한 줄 배치 */
-  column-gap: 12px;
-  align-items: baseline;
+  display: flex; /* 첫 줄: 칩+이름, 둘째 줄: 설명 */
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: 10px;
   background: var(--cream);
   padding: 11px 16px 12px;
   border: 1px solid var(--line);
@@ -158,8 +158,6 @@ h1 {
 
 .f-num {
   display: inline-block;
-  grid-column: 1 / -1;
-  justify-self: start;
   background: #f7d9b6;
   color: var(--rust);
   font-size: 14px;
@@ -167,7 +165,6 @@ h1 {
   letter-spacing: .4px;
   padding: 4px 11px;
   border-radius: 999px;
-  margin-bottom: 6px;
 }
 
 .f-name {
@@ -178,6 +175,8 @@ h1 {
 }
 
 .f-desc {
+  flex-basis: 100%; /* 설명은 둘째 줄 전체 — 모든 카드에서 시작점 동일 */
+  margin-top: 4px;
   color: #5c4636;
   line-height: 1.55;
   font-size: 14px;
