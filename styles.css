@@ -16,6 +16,7 @@ html { -webkit-text-size-adjust: 100%; background-color: #f4b980; }
 body {
   font-family: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", sans-serif;
   color: var(--cocoa);
+  word-break: keep-all;
   min-height: 100dvh;
   display: flex;
   justify-content: center;
@@ -59,8 +60,11 @@ body::before {
   position: relative;
   z-index: 1;
   width: 100%;
-  max-width: 640px;
-  background: var(--paper);
+  max-width: 680px;
+  background-color: var(--paper);
+  /* 아주 연한 발자국 패턴 (SVG 도형이라 이모지 렌더링 차이 없음) */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cg fill='%23a8481f' fill-opacity='.045'%3E%3Cg transform='translate(34 38) rotate(-18)'%3E%3Cellipse cx='0' cy='7' rx='7.5' ry='6'/%3E%3Ccircle cx='-7' cy='-4' r='3.2'/%3E%3Ccircle cx='0' cy='-7' r='3.2'/%3E%3Ccircle cx='7' cy='-4' r='3.2'/%3E%3C/g%3E%3Cg transform='translate(104 108) rotate(16)'%3E%3Cellipse cx='0' cy='7' rx='7.5' ry='6'/%3E%3Ccircle cx='-7' cy='-4' r='3.2'/%3E%3Ccircle cx='0' cy='-7' r='3.2'/%3E%3Ccircle cx='7' cy='-4' r='3.2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  background-size: 140px 140px;
   border-radius: 30px;
   padding: clamp(22px, 5.5vw, 42px);
   border: 1px solid rgba(255, 255, 255, .65);
@@ -72,15 +76,19 @@ body::before {
 
 header { text-align: center; margin-bottom: clamp(20px, 4.5vw, 30px); }
 
+/* 스윙(회전)과 바운스(상하)를 분리: 12시 통과 시 회전 속도가 최대라 멈칫하지 않음 */
 .emblem {
   font-size: clamp(42px, 12vw, 62px);
   line-height: 1;
   filter: drop-shadow(0 6px 10px rgba(168, 72, 31, .35));
   transform-origin: 50% 85%;
-  animation: bob 2s ease-in-out infinite alternate;
+  animation: swing 2s ease-in-out infinite alternate;
 }
 
-.emblem:hover { animation-duration: 1.1s; }
+.emblem-fox {
+  display: inline-block;
+  animation: bob-y 2s ease-in-out infinite;
+}
 
 h1 {
   font-family: "Jua", "Pretendard", sans-serif;
@@ -124,68 +132,114 @@ h1 {
   line-height: 1.6;
 }
 
-table { width: 100%; border-collapse: separate; border-spacing: 0 8px; }
+/* 재주 카드 그리드 */
+.deck {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
 
-tbody td {
+.talent {
+  display: grid;
+  grid-template-columns: auto 1fr; /* 이름 | 설명 한 줄 배치 */
+  column-gap: 12px;
+  align-items: baseline;
   background: var(--cream);
-  padding: 14px 16px;
-  vertical-align: top;
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
-  transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
-}
-
-td.f-num {
-  width: 15%;
-  white-space: nowrap;
-  font-weight: 700;
-  color: var(--fox);
-  font-size: 13.5px;
-  letter-spacing: .3px;
+  padding: 11px 16px 12px;
+  border: 1px solid var(--line);
   border-left: 4px solid var(--fox);
-  border-radius: 16px 0 0 16px;
+  border-radius: 18px;
+  box-shadow: 0 6px 14px -10px rgba(168, 72, 31, .35);
+  transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+  animation: rise .5s cubic-bezier(.34, 1.56, .64, 1) backwards;
+  animation-delay: calc(var(--i, 0) * 55ms + .15s);
 }
 
-td.f-name {
-  width: 30%;
-  white-space: nowrap;
+.f-num {
+  display: inline-block;
+  grid-column: 1 / -1;
+  justify-self: start;
+  background: #f7d9b6;
+  color: var(--rust);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: .4px;
+  padding: 4px 11px;
+  border-radius: 999px;
+  margin-bottom: 6px;
+}
+
+.f-name {
   font-weight: 700;
   color: var(--rust);
+  font-size: 16px;
+  white-space: nowrap;
 }
 
-td.f-desc {
+.f-desc {
   color: #5c4636;
   line-height: 1.55;
-  font-size: 14.5px;
-  border-right: 1px solid var(--line);
-  border-radius: 0 16px 16px 0;
+  font-size: 14px;
 }
 
 .fox-ico {
   display: inline-block;
   margin-right: 7px;
+  transform-origin: 50% 80%; /* 목 근처를 축으로 갸웃 */
   transition: transform .18s ease;
-  animation: ico-bob 2.4s ease-in-out infinite alternate backwards;
-  animation-delay: calc(var(--i, 0) * 240ms);
 }
 
-tbody tr { animation: rise .5s cubic-bezier(.34, 1.56, .64, 1) backwards; animation-delay: calc(var(--i, 0) * 55ms + .15s); }
-tbody tr:nth-child(1) { --i: 0; }
-tbody tr:nth-child(2) { --i: 1; }
-tbody tr:nth-child(3) { --i: 2; }
-tbody tr:nth-child(4) { --i: 3; }
-tbody tr:nth-child(5) { --i: 4; }
-tbody tr:nth-child(6) { --i: 5; }
-tbody tr:nth-child(7) { --i: 6; }
-tbody tr:nth-child(8) { --i: 7; }
-tbody tr:nth-child(9) { --i: 8; }
-tbody tr:nth-child(10) { --i: 9; }
-tbody tr:nth-child(11) { --i: 10; }
-tbody tr:nth-child(12) { --i: 11; }
-tbody tr:nth-child(13) { --i: 12; }
-tbody tr:hover td { background: #fff; transform: translateY(-3px); box-shadow: 0 12px 22px -12px rgba(168, 72, 31, .45); }
-tbody tr:hover td.f-num { border-left-color: var(--rust); }
-tbody tr:hover .fox-ico { animation: none; transform: rotate(-12deg) scale(1.22); }
+.talent:nth-child(1) { --i: 0; }
+.talent:nth-child(2) { --i: 1; }
+.talent:nth-child(3) { --i: 2; }
+.talent:nth-child(4) { --i: 3; }
+.talent:nth-child(5) { --i: 4; }
+.talent:nth-child(6) { --i: 5; }
+.talent:nth-child(7) { --i: 6; }
+.talent:nth-child(8) { --i: 7; }
+.talent:nth-child(9) { --i: 8; }
+.talent:nth-child(10) { --i: 9; }
+.talent:nth-child(11) { --i: 10; }
+.talent:nth-child(12) { --i: 11; }
+.talent:nth-child(13) { --i: 12; }
+.talent:hover {
+  background: #fff;
+  transform: translateY(-3px);
+  box-shadow: 0 12px 22px -12px rgba(168, 72, 31, .45);
+  border-left-color: var(--rust);
+}
+
+/* hover 시 여우가 살짝 고개를 갸웃 */
+.talent:hover .fox-ico { transform: rotate(-10deg); }
+
+/* 스크롤 산책 여우 (script.js가 생성) */
+#fox-walker {
+  position: fixed;
+  left: 0;
+  bottom: 6px;
+  font-size: 26px;
+  line-height: 1;
+  z-index: 3;
+  pointer-events: none;
+  user-select: none;
+  filter: drop-shadow(0 2px 3px rgba(90, 40, 10, .25));
+}
+
+.fox-print {
+  position: fixed;
+  bottom: 4px;
+  font-size: 12px;
+  z-index: 2;
+  pointer-events: none;
+  user-select: none;
+  animation: print-fade 1.2s ease-out forwards;
+}
+
+@keyframes print-fade {
+  from { opacity: .5; }
+  to   { opacity: 0; }
+}
 
 footer { text-align: center; margin-top: 24px; color: #9a6a44; font-size: 12.5px; line-height: 1.7; }
 .shrine { font-size: 18px; letter-spacing: 3px; margin-bottom: 8px; }
@@ -193,8 +247,9 @@ footer { text-align: center; margin-top: 24px; color: #9a6a44; font-size: 12.5px
 
 .tail-fox {
   display: inline-block;
-  animation: wave 2.4s ease-in-out infinite;
-  animation-delay: calc(var(--i, 0) * .18s);
+  transform-origin: 50% 100%;
+  animation: hop 2.4s ease-in-out infinite;
+  animation-delay: calc(var(--i, 0) * .15s);
 }
 .tail-fox:nth-child(1) { --i: 0; }
 .tail-fox:nth-child(2) { --i: 1; }
@@ -205,16 +260,26 @@ footer { text-align: center; margin-top: 24px; color: #9a6a44; font-size: 12.5px
 .tail-fox:nth-child(7) { --i: 6; }
 .tail-fox:nth-child(8) { --i: 7; }
 .tail-fox:nth-child(9) { --i: 8; }
+.tail-fox:nth-child(10) { --i: 9; }
+.tail-fox:nth-child(11) { --i: 10; }
+
+/* 문구 글자는 같은 타이밍, 절제된 진폭으로 */
+.tails-caption .tail-fox { animation-name: hop-soft; }
 
 @keyframes rise {
   from { opacity: 0; transform: translateY(18px); }
   to   { opacity: 1; transform: none; }
 }
 
-@keyframes bob {
-  from { transform: translateY(0) rotate(-8deg); }
-  50%  { transform: translateY(-9px) rotate(1deg); }
-  to   { transform: translateY(0) rotate(8deg); }
+@keyframes swing {
+  from { transform: rotate(-8deg); }
+  to   { transform: rotate(8deg); }
+}
+
+/* 스윙이 12시를 지나는 순간(1s)에 정점이 오도록 주기를 맞춤 */
+@keyframes bob-y {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-7px); }
 }
 
 @keyframes sway {
@@ -222,57 +287,35 @@ footer { text-align: center; margin-top: 24px; color: #9a6a44; font-size: 12.5px
   to   { transform: translateY(16px) translateX(9px) rotate(calc(var(--r, 0deg) + 13deg)); }
 }
 
-@keyframes ico-bob {
-  from { transform: translateY(0) rotate(-6deg); }
-  to   { transform: translateY(-3px) rotate(6deg); }
+/* 쭈그림 → 점프 → 착지 눌림 콩콩 */
+@keyframes hop {
+  0%, 55%, 100% { transform: translateY(0) scale(1, 1); }
+  60% { transform: translateY(2px) scale(1.2, .8); }
+  70% { transform: translateY(-10px) scale(.92, 1.1); }
+  80% { transform: translateY(0) scale(1.08, .92); }
+  88% { transform: translateY(0) scale(1, 1); }
 }
 
-@keyframes wave {
-  0%, 55%, 100% { transform: translateY(0) rotate(0deg); }
-  30% { transform: translateY(-9px) rotate(-14deg); }
+/* hop과 같은 박자, 작은 진폭 (글자용) */
+@keyframes hop-soft {
+  0%, 55%, 100% { transform: translateY(0) scale(1, 1); }
+  60% { transform: translateY(1px) scale(1.06, .95); }
+  70% { transform: translateY(-3px) scale(.98, 1.03); }
+  80% { transform: translateY(0) scale(1.02, .98); }
+  88% { transform: translateY(0) scale(1, 1); }
 }
 
-/* 좁은 화면: 각 행을 세로 카드로 전환 */
-@media (max-width: 480px) {
-  table, tbody, tr, td { display: block; width: 100%; }
-
-  tr {
-    margin-bottom: 12px;
-    border-radius: 18px;
-    overflow: hidden;
-    box-shadow: 0 8px 18px -12px rgba(168, 72, 31, .4);
-    transition: transform .15s ease;
+/* 터치 기기(마우스 없음)만: 탭 시 :hover가 고정되므로 hover 효과를 원복.
+   화면 폭 기준이 아니라 입력 장치 기준이라 좁은 창의 데스크톱에서는 hover가 살아 있음 */
+@media (hover: none) {
+  .talent:hover {
+    background: var(--cream);
+    transform: none;
+    box-shadow: 0 6px 14px -10px rgba(168, 72, 31, .35);
+    border-left-color: var(--fox);
   }
-
-  tbody td { border: none; }
-
-  td.f-num {
-    width: 100%;
-    border-radius: 0;
-    background: #f7d9b6;
-    color: var(--rust);
-    font-size: 12.5px;
-    font-weight: 700;
-    letter-spacing: .5px;
-    padding: 7px 16px;
-  }
-
-  td.f-name {
-    width: 100%;
-    border-radius: 0;
-    background: var(--fox);
-    color: #fff;
-    font-size: 16px;
-    padding: 13px 16px;
-  }
-
-  td.f-name .fox-ico { filter: drop-shadow(0 1px 1px rgba(0,0,0,.2)); }
-  td.f-desc { border-radius: 0; font-size: 14px; }
-  /* 터치 기기는 탭 시 :hover가 고정되므로 데스크톱용 흰 배경을 원래 색으로 되돌림 */
-  tbody tr:hover td { transform: none; box-shadow: none; background: var(--cream); }
-  tbody tr:hover td.f-num { background: #f7d9b6; }
-  tbody tr:hover td.f-name { background: var(--fox); }
-  tbody tr:active { transform: scale(.98); }
+  .talent:hover .fox-ico { transform: none; }
+  .talent:active { transform: scale(.98); }
 }
 
 @media (prefers-reduced-motion: reduce) {
