@@ -1,0 +1,91 @@
+@charset "UTF-8";
+
+/* ============================================================
+   여우 도감 — AUTUMN 테마 🍂
+   계절 디자인 토큰 전부가 이 파일에 있다. (셀렉터 없음, :root 토큰만)
+   새 계절을 만들 때: 이 파일을 복사해 themes/<계절>.css 로 저장하고
+   값만 바꾼 뒤, index.html 의 테마 <link> 한 곳만 교체하면 된다.
+   ============================================================ */
+:root {
+  /* ---- 기본 팔레트 ---- */
+  --fox:   #d86f36;                        /* 메인 포인트(카드 왼쪽 선, 부제, 선택 배경) */
+  --rust:  #913e20;                        /* 진한 강조(제목, 이름, 칩 글자) */
+  --cocoa: #2f2119;                        /* 본문 글자색 */
+  --cream: #fff4e7;                        /* 재주 카드 바탕 */
+  --gold:  #d99549;                        /* 구분선·신사 줄 색 */
+  --paper: #fffdf8;                        /* 큰 카드 종이색 */
+  --line:  rgba(145, 62, 32, .16);         /* 재주 카드 테두리 */
+  --muted: #72533f;                        /* 흐린 안내 문구 */
+  --sage-soft: rgba(104, 123, 92, .18);    /* 은은한 세이지 틴트 */
+  --shadow: rgba(86, 42, 18, .28);         /* 기본 그림자색 */
+
+  /* ---- 페이지 배경 ---- */
+  --page-bg: #eaa46c;                      /* CSS 로드 전/스크롤 여백 폴백 배경 */
+  /* body::before 전체 배경 (3중 레이어: 세이지 사선 + 크림 빛 + 계절 그라데이션) */
+  --page-backdrop:
+    linear-gradient(142deg, rgba(104, 123, 92, .18) 0%, rgba(104, 123, 92, 0) 31%),
+    radial-gradient(1200px 640px at 50% -14%, #fff0d5 0%, rgba(255,240,213,0) 63%),
+    linear-gradient(168deg, #fbe3c4 0%, #efb375 48%, #d5723b 100%);
+  --theme-color: #e07a3f;                  /* 브라우저 크롬 색(meta theme-color, script.js가 동기화) */
+  --selection-ink: #fffaf3;                /* 텍스트 선택 시 글자색 */
+
+  /* ---- 글자·선 ---- */
+  --ink-soft: #4f4035;                     /* 재주 설명 글자색 */
+  --footer-ink: #8d674d;                   /* footer 글자색 */
+  --footer-line: rgba(145, 62, 32, .09);   /* footer 위 구분선 */
+  --sage-strong: rgba(104, 123, 92, .46);  /* 헤더 구분선 그라데이션 중간색 */
+  --h1-glow-color: rgba(255, 255, 255, .8);/* 제목 밑 하이라이트 */
+
+  /* ---- 큰 카드 ---- */
+  --card-wash: linear-gradient(180deg, rgba(255, 255, 255, .72), rgba(255, 253, 248, .88) 22%, rgba(255, 253, 248, .96));
+  /* 아주 연한 발자국 패턴 (SVG 도형이라 이모지 렌더링 차이 없음).
+     url() 안에는 var()를 못 쓰므로 url 전체가 이 변수에 산다.
+     패턴을 없애려면 none 으로 (레이어 2개 계약 유지 — none도 유효한 레이어). */
+  --card-pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cg fill='%23913e20' fill-opacity='.043'%3E%3Cg transform='translate(34 38) rotate(-18)'%3E%3Cellipse cx='0' cy='7' rx='7.5' ry='6'/%3E%3Ccircle cx='-7' cy='-4' r='3.2'/%3E%3Ccircle cx='0' cy='-7' r='3.2'/%3E%3Ccircle cx='7' cy='-4' r='3.2'/%3E%3C/g%3E%3Cg transform='translate(104 108) rotate(16)'%3E%3Cellipse cx='0' cy='7' rx='7.5' ry='6'/%3E%3Ccircle cx='-7' cy='-4' r='3.2'/%3E%3Ccircle cx='0' cy='-7' r='3.2'/%3E%3Ccircle cx='7' cy='-4' r='3.2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  --card-pattern-size: 140px 140px;        /* 패턴 타일 크기 (패턴이 none이면 auto로) */
+  --card-border: rgba(255, 255, 255, .76); /* 카드 테두리 */
+  --card-shadow:
+    0 34px 72px -34px var(--shadow),
+    0 14px 32px -24px rgba(86, 42, 18, .38),
+    inset 0 1px 0 rgba(255, 255, 255, .95);
+  /* 카드 가장자리 은은한 비네트 (::before) */
+  --card-vignette:
+    linear-gradient(90deg, rgba(104, 123, 92, .13), transparent 22%, transparent 78%, rgba(104, 123, 92, .10)),
+    linear-gradient(180deg, rgba(255, 255, 255, .55), transparent 18%);
+  /* 카드 상단 리본 라인 (::after) */
+  --card-ribbon: linear-gradient(90deg, transparent, var(--sage-soft), rgba(216, 111, 54, .26), var(--sage-soft), transparent);
+  --emblem-shadow-color: rgba(145, 62, 32, .24); /* 🦊 엠블럼 그림자색 */
+
+  /* ---- 재주 카드 ---- */
+  --talent-surface:
+    linear-gradient(180deg, rgba(255, 255, 255, .44), transparent 64%),
+    var(--cream);
+  --talent-surface-hover:
+    linear-gradient(180deg, rgba(255, 255, 255, .86), transparent 62%),
+    #fffaf2;
+  --talent-shadow:
+    0 8px 18px -16px rgba(145, 62, 32, .42),
+    inset 0 1px 0 rgba(255, 255, 255, .72);
+  --talent-shadow-hover:
+    0 14px 24px -19px rgba(145, 62, 32, .58),
+    inset 0 1px 0 rgba(255, 255, 255, .86);
+  --talent-corner: linear-gradient(135deg, rgba(104, 123, 92, .09), transparent 68%); /* 우상단 코너 틴트 */
+  --chip-bg: #f6d9b5;                      /* 일미호~십오미호 칩 배경 */
+  --chip-border: rgba(145, 62, 32, .06);
+  --chip-shadow: inset 0 1px 0 rgba(255, 255, 255, .52);
+  --icon-shadow-color: rgba(145, 62, 32, .18); /* 카드 속 🦊 그림자색 */
+
+  /* ---- 스크롤 산책 여우 ---- */
+  --walker-shadow-color: rgba(90, 40, 10, .25);
+
+  /* ---- 배경 장식 (계절 소품) ----
+     화면 가장자리에 떠다니는 장식 6개의 글리프. 계절마다 교체. */
+  --decor-a: "🍂";
+  --decor-b: "🍁";
+  --decor-c: "🍁";
+  --decor-d: "🍂";
+  --decor-e: "⛩️";
+  --decor-f: "🐾";
+  --decor-filter: saturate(.82) sepia(.08); /* 장식 톤 보정 (가을: 살짝 세피아) */
+  --decor-opacity: .115;                    /* 장식 투명도 */
+}

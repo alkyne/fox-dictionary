@@ -1,5 +1,13 @@
 "use strict";
 
+// 테마의 --theme-color를 브라우저 크롬 색(meta theme-color)에 동기화
+// (walker IIFE와 분리: 저쪽은 prefers-reduced-motion에서 조기 반환하므로)
+(() => {
+  const c = getComputedStyle(document.documentElement).getPropertyValue("--theme-color").trim();
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if (c && meta) meta.content = c;
+})();
+
 // 스크롤 산책 여우: 스크롤 진행도만큼 화면 하단을 걸어가며 발자국을 남긴다
 (() => {
   if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
